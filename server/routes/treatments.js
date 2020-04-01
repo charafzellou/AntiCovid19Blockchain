@@ -7,7 +7,7 @@ router.get('/', (request, response) => {
 });
 
 router.get('/:id', (request, response) => {
-	TreatmentModel.findOne({coin_id: request.params.id}).then(data => response.json(data));
+	TreatmentModel.findOne({treatment_id: request.params.id}).then(data => response.json(data));
 });
 
 router.post('/', (request, response) => {
@@ -26,13 +26,13 @@ router.post('/', (request, response) => {
 });
 
 router.delete('/:id', (request, response) => {
-	TreatmentModel.deleteOne({coin_id: request.params.id})
+	TreatmentModel.deleteOne({treatment_id: request.params.id})
 	.then(() => response.sendStatus(204));
 });
 
 router.put('/:id', (request, response) => {
 	TreatmentModel.findByIdAndUpdate(
-		{coin_id: request.params.id}, request.body)
+		{treatment_id: request.params.id}, request.body)
 		.then(data => response.json(...data, ...req.body));
 });
 

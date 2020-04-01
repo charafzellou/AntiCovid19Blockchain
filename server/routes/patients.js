@@ -7,7 +7,7 @@ router.get('/', (request, response) => {
 });
 
 router.get('/:id', (request, response) => {
-	PatientModel.findOne({coin_id: request.params.id}).then(data => response.json(data));
+	PatientModel.findOne({patient_id: request.params.id}).then(data => response.json(data));
 });
 
 router.post('/', (request, response) => {
@@ -26,13 +26,13 @@ router.post('/', (request, response) => {
 });
 
 router.delete('/:id', (request, response) => {
-	PatientModel.deleteOne({coin_id: request.params.id})
+	PatientModel.deleteOne({patient_id: request.params.id})
 	.then(() => response.sendStatus(204));
 });
 
 router.put('/:id', (request, response) => {
 	PatientModel.findByIdAndUpdate(
-		{coin_id: request.params.id}, request.body)
+		{patient_id: request.params.id}, request.body)
 		.then(data => response.json(...data, ...req.body));
 });
 
