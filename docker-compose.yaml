@@ -56,14 +56,14 @@ services:
     ports:
       - '8545:8545'
     volumes:
-      - './ganache:/ganache_data'
-    entrypoint:
+      - './ganache/data/:/ganache_data'
+    command:
       - node
-      - ./build/cli.node.js
+      - './build/cli.node.js'
       - --deterministic
       - --db=/ganache_data
       - --mnemonic
-      - 'minimum symptom minute gloom tragic situate silver mechanic salad amused elite beef'
+      - 'weapon gap vintage latin dry install recall rocket balcony always stamp measure'
       - --networkId
       - '5777'
       - --hostname
