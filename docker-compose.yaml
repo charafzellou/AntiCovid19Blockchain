@@ -1,7 +1,7 @@
 version: '3'
 services:
   database:
-    image: mongo
+    image: 'mongo:latest'
     container_name: "mongodb"
     ports:
       - '27017:27017'
@@ -11,9 +11,9 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
       MONGO_DATA_DIR: '/data/db'
     volumes:
-      - ./db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - './db/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro'
   mongo-express:
-    image: mongo-express
+    image: 'mongo-express:latest'
     container_name: "mongoexpress"
     depends_on:
       - 'database'
@@ -28,36 +28,45 @@ services:
       ME_CONFIG_MONGODB_AUTH_PASSWORD: password
       ME_CONFIG_BASICAUTH_USERNAME: root
       ME_CONFIG_BASICAUTH_PASSWORD: password
-  # apirequest:
-  #   image: 'node:10-alpine'
-  #   container_name: "apirequest"
-  #   depends_on:
-  #     - 'database'
-  #   volumes:
-  #     - './api:/usr/src/app'
-  #   working_dir: '/usr/src/app'
-  #   ports:
-  #     - '1234:1234'
-  #   command: "npm start"
-  # apireact:
-  #   image: 'node:10-alpine'
-  #   container_name: "apireact"
-  #   depends_on:
-  #     - 'database'
-  #   volumes:
-  #     - './server:/usr/src/app'
-  #   working_dir: '/usr/src/app'
-  #   ports:
-  #     - '3000:3000'
-  #   command: "npm start"
-  # webreact:
-  #   image: 'node:10-alpine'
-  #   container_name: "webreact"
-  #   depends_on:
-  #     - 'apireact'
-  #   volumes:
-  #     - './client:/usr/src/app'
-  #   working_dir: '/usr/src/app'
-  #   ports:
-  #     - '8686:8686'
-  #   command: "npm start"
+  apireact:
+    image: 'node:10-alpine'
+    container_name: "apireact"
+    depends_on:
+      - 'database'
+    volumes:
+      - './server:/usr/src/app'
+    working_dir: '/usr/src/app'
+    ports:
+      - '3000:3000'
+    command: "npm start"
+  webreact:
+    image: 'node:10-alpine'
+    container_name: "webreact"
+    depends_on:
+      - 'apireact'
+    volumes:
+      - './client:/usr/src/app'
+    working_dir: '/usr/src/app'
+    ports:
+      - '8686:8686'
+    command: "npm start"
+  ganache-cli:
+    image: 'trufflesuite/ganache-cli:latest'
+    container_name: "ganachecli"
+    ports:
+      - '8545:8545'
+    volumes:
+      - './ganache/data/:/ganache_data'
+    command:
+      - node
+      - './build/cli.node.js'
+      - --deterministic
+      - --db=/ganache_data
+      - --mnemonic
+      - 'weapon gap vintage latin dry install recall rocket balcony always stamp measure'
+      - --networkId
+      - '5777'
+      - --hostname
+      - '0.0.0.0'
+      - --debug
+    # ENTRYPOINT ["node", "./build/cli.node.js"]

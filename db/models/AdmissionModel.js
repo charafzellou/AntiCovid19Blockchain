@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const AdmissionSchema = mongoose.Schema({
         patient_id : String,
-        treatment_name : String,
+        treatment_id : String,
         admission_birthdate : String,
         admission_gender : String,
         admission_postalcode : String,
