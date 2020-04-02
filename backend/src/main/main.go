@@ -1,12 +1,10 @@
 package main
 
 import (
+	"anticovid/routes"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-
-	"../routes"
-
-	"github.com/gorilla/mux"
 )
 
 func main(){

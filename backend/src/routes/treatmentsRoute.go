@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"../contractManager"
+	"anticovid/contractManager"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
