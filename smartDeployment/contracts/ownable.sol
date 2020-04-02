@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity ^0.5.0;
 
 /**
  * @dev The contract has an owner address, and provides basic authorization control whitch
