@@ -8,16 +8,18 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
 	"math/big"
+	"strings"
 )
 
 // pub key = 0x3918EE5623bcC372282f422Cd592F564ACCd01E8
-const key = `{"address":"3918ee5623bcc372282f422cd592f564accd01e8","crypto":{"cipher":"aes-128-ctr","ciphertext":"6ee348b5e048c8b104e4452763321f949333736de3a0a4e639fedd82ba9fa79a","cipherparams":{"iv":"25bb12208315d9a5116c295506b319b8"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"926de8beb0bc714a755c2ce43a3bb9a16211f0ecf4e82237ba69f8285315522d"},"mac":"ea22c26fe3ed91fa0d4e7d407736e13171e9da3fd90d64874e412ecdaf2b3e57"},"id":"36595d87-880d-4b80-92a3-bf2a7f44210d","version":3}`
+const Key = `{"address":"3918ee5623bcc372282f422cd592f564accd01e8","crypto":{"cipher":"aes-128-ctr","ciphertext":"6ee348b5e048c8b104e4452763321f949333736de3a0a4e639fedd82ba9fa79a","cipherparams":{"iv":"25bb12208315d9a5116c295506b319b8"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":262144,"p":1,"r":8,"salt":"926de8beb0bc714a755c2ce43a3bb9a16211f0ecf4e82237ba69f8285315522d"},"mac":"ea22c26fe3ed91fa0d4e7d407736e13171e9da3fd90d64874e412ecdaf2b3e57"},"id":"36595d87-880d-4b80-92a3-bf2a7f44210d","version":3}`
 
 type contractManager struct {
 	healthShare *HealthShare
+	auth *bind.TransactOpts
 }
 
-func NewConractManager(ContractHex string, rpcUrl string) (*contractManager, error){
+func NewContractManager(ContractHex string, rpcUrl string, jsonKey string, passphrase string) (*contractManager, error){
 	conn, err := ethclient.Dial(rpcUrl)
 	if err != nil {
 		return nil, err
@@ -26,9 +28,28 @@ func NewConractManager(ContractHex string, rpcUrl string) (*contractManager, err
 	if err != nil {
 		return nil, err
 	}
-	createdContractManager := contractManager{healthShare: healthShare}
-	return &createdContractManager, nil
+	if jsonKey != "" && passphrase != "" {
+		auth, err := bind.NewTransactor(strings.NewReader(jsonKey), passphrase)
+		if err != nil {
+			return nil, err
+		}
+		createdContractManager := contractManager{healthShare: healthShare, auth: auth}
+		return &createdContractManager, nil
+	} else {
+		auth := bind.TransactOpts{
+			From:     common.HexToAddress("0x0000000000000000000000000000000000000000"),
+			Nonce:    nil,
+			Signer:   nil,
+			Value:    nil,
+			GasPrice: nil,
+			GasLimit: 0,
+			Context:  nil,
+		}
+		createdContractManager := contractManager{healthShare: healthShare, auth: &auth}
+		return &createdContractManager, nil
+	}
 }
+
 
 func Test() (){
 	// Create an IPC based RPC connection to a remote node and instantiate a contract binding
@@ -63,15 +84,9 @@ func (_contractManager *contractManager) CreatePatient(
 	postCode string,
 	country string,
 	refPhysician string,
-	medicalHistory string,
-	privateKey string ) (string, error) {
-	key, err := crypto.HexToECDSA(privateKey)
-	if err != nil {
-		return "", err
-	}
-	auth := bind.NewKeyedTransactor(key)
-	_, err = _contractManager.healthShare.NewPatient(
-		auth,
+	medicalHistory string ) (string, error) {
+	_, err := _contractManager.healthShare.NewPatient(
+		_contractManager.auth,
 		big.NewInt(_id),
 		big.NewInt(treatmentId),
 		big.NewInt(birthYear),
@@ -90,12 +105,48 @@ func (_contractManager *contractManager) CreatePatient(
 	return result, nil
 }
 
-func (_contractManager *contractManager) GetPatient(id int64, privateKey string) (string, error){
-	key, err := crypto.HexToECDSA(privateKey)
+func (_contractManager *contractManager) SetScreeningDate(_id int64, timestamp int64) (string, error){
+	_, err := _contractManager.healthShare.PatientScreening(
+		_contractManager.auth,
+		big.NewInt(_id),
+		big.NewInt(timestamp),
+	)
 	if err != nil {
 		return "", err
 	}
-	opts := bind.CallOpts{Pending:true, From:crypto.PubkeyToAddress(key.PublicKey)}
+	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	return result, nil
+}
+
+func (_contractManager *contractManager) SetDeathDate(_id int64, timestamp int64) (string, error){
+	_, err := _contractManager.healthShare.PatientDeath(
+		_contractManager.auth,
+		big.NewInt(_id),
+		big.NewInt(timestamp),
+	)
+	if err != nil {
+		return "", err
+	}
+	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	return result, nil
+}
+
+func (_contractManager *contractManager) SetRemissionDate(_id int64, timestamp int64) (string, error){
+	_, err := _contractManager.healthShare.PatientRemision(
+		_contractManager.auth,
+		big.NewInt(_id),
+		big.NewInt(timestamp),
+	)
+	if err != nil {
+		return "", err
+	}
+	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	return result, nil
+}
+
+func (_contractManager *contractManager) GetPatient(id int64) (string, error){
+	opts := bind.CallOpts{Pending:true}
+
 	treatmentId,
 	screeningDate,
 	remissionDate,
@@ -103,6 +154,7 @@ func (_contractManager *contractManager) GetPatient(id int64, privateKey string)
 	if err != nil {
 		return "", err
 	}
+
 	birthYear,
 	sex,
 	postCode,
@@ -112,6 +164,7 @@ func (_contractManager *contractManager) GetPatient(id int64, privateKey string)
 	if err != nil {
 		return "", err
 	}
+
 	result := fmt.Sprintf(`{
 "treatmentId": %d; "screeningDate": %d; "remissionDate": %d; "deathDate": %d;
 "birthYear": %d; "sexe": %t; "postCode": %s; "country": %s; "refPhysician": %s; "medicalHistory": %s}`,
@@ -123,15 +176,9 @@ func (_contractManager *contractManager) CreateTreatment(
 	_id int64,
 	activeAgent string,
 	description string,
-	steps string,
-	privateKey string ) (string, error) {
-	key, err := crypto.HexToECDSA(privateKey)
-	if err != nil {
-		return "", err
-	}
-	auth := bind.NewKeyedTransactor(key)
-	_, err = _contractManager.healthShare.NewTreatment(
-		auth,
+	steps string ) (string, error) {
+	_, err := _contractManager.healthShare.NewTreatment(
+		_contractManager.auth,
 		big.NewInt(_id),
 		activeAgent,
 		description,
@@ -144,12 +191,8 @@ func (_contractManager *contractManager) CreateTreatment(
 	return result, nil
 }
 
-func (_contractManager *contractManager) GetTreatment(id int64, privateKey string) (string, error){
-	key, err := crypto.HexToECDSA(privateKey)
-	if err != nil {
-		return "", err
-	}
-	opts := bind.CallOpts{Pending:true, From:crypto.PubkeyToAddress(key.PublicKey)}
+func (_contractManager *contractManager) GetTreatment(id int64) (string, error){
+	opts := bind.CallOpts{Pending:true}
 	activeAgent,
 	description,
 	steps, err := _contractManager.healthShare.GetTreatment(&opts, big.NewInt(id))

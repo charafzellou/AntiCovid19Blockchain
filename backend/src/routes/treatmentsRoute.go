@@ -25,7 +25,7 @@ func GetTreatmentsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -33,7 +33,7 @@ func GetTreatmentsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := cManager.GetTreatment(treatmentId, "xxx")
+	response, err := cManager.GetTreatment(treatmentId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -63,7 +63,7 @@ func PostTreatment(w http.ResponseWriter, r *http.Request) {
 	description := r.FormValue("description")
 	steps := r.FormValue("steps")
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -76,7 +76,6 @@ func PostTreatment(w http.ResponseWriter, r *http.Request) {
 		activeAgent,
 		description,
 		steps,
-		"xxx",
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
