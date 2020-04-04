@@ -21,7 +21,7 @@ func main(){
 	treatments := router.PathPrefix("/v1/treatments").Subrouter()
 	// GET
 	//treatments.HandleFunc("", routes.GetTreatments).Methods(http.MethodGet)
-	treatments.HandleFunc("/{id}", routes.GetTreatmentsById).Methods(http.MethodGet)
+	treatments.HandleFunc("/{_id}", routes.GetTreatmentsById).Methods(http.MethodGet)
 	// POST
 	treatments.HandleFunc("", routes.PostTreatment).Methods(http.MethodPost)
 

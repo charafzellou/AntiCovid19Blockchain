@@ -100,7 +100,7 @@ func (_contractManager *contractManager) CreatePatient(
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "treatmentId": %d; "screeningDate": %d; "birthYear": %d; "sexe": %t; "postCode": %s; "country": %s; "refPhysician": %s; "medicalHistory": %s}`,
+	result := fmt.Sprintf(`{ "treatmentId": %d, "screeningDate": %d, "birthYear": %d, "sexe": %t, "postCode": "%s", "country": "%s", "refPhysician": "%s", "medicalHistory": "%s"}`,
 		treatmentId, screeningDate, birthYear, sex, postCode, country, refPhysician, medicalHistory)
 	return result, nil
 }
@@ -114,7 +114,7 @@ func (_contractManager *contractManager) SetScreeningDate(_id int64, timestamp i
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	result := fmt.Sprintf(`{ "id": %d, success: true}`, _id)
 	return result, nil
 }
 
@@ -127,7 +127,7 @@ func (_contractManager *contractManager) SetDeathDate(_id int64, timestamp int64
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	result := fmt.Sprintf(`{ "id": %d, success: true}`, _id)
 	return result, nil
 }
 
@@ -140,7 +140,7 @@ func (_contractManager *contractManager) SetRemissionDate(_id int64, timestamp i
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "id": %d; success: true}`, _id)
+	result := fmt.Sprintf(`{ "id": %d, success: true}`, _id)
 	return result, nil
 }
 
@@ -166,8 +166,8 @@ func (_contractManager *contractManager) GetPatient(id int64) (string, error){
 	}
 
 	result := fmt.Sprintf(`{
-"treatmentId": %d; "screeningDate": %d; "remissionDate": %d; "deathDate": %d;
-"birthYear": %d; "sexe": %t; "postCode": %s; "country": %s; "refPhysician": %s; "medicalHistory": %s}`,
+"treatmentId": %d, "screeningDate": %d, "remissionDate": %d, "deathDate": %d,
+"birthYear": %d, "sexe": %t, "postCode": "%s", "country": "%s", "refPhysician": "%s", "medicalHistory": "%s"}`,
 treatmentId, screeningDate, remissionDate, deathDate, birthYear, sex, postCode, country, refPhysician, medicalHistory)
 	return result, nil
 }
@@ -187,7 +187,7 @@ func (_contractManager *contractManager) CreateTreatment(
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "activeAgent": %s; "description": %s; "steps": %s}`, activeAgent, description, steps)
+	result := fmt.Sprintf(`{ "activeAgent": "%s", "description": "%s", "steps": "%s"}`, activeAgent, description, steps)
 	return result, nil
 }
 
@@ -199,7 +199,7 @@ func (_contractManager *contractManager) GetTreatment(id int64) (string, error){
 	if err != nil {
 		return "", err
 	}
-	result := fmt.Sprintf(`{ "activeAgent": %s; "description": %s; "steps": %s }`, activeAgent, description, steps)
+	result := fmt.Sprintf(`{ "activeAgent": "%s", "description": "%s", "steps": "%s" }`, activeAgent, description, steps)
 	return result, nil
 }
 
