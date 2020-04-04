@@ -75,8 +75,10 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 	country := r.FormValue("country")
 	refPhysician := r.FormValue("refPhysician")
 	medicalHistory := r.FormValue("medicalHistory")
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -124,8 +126,10 @@ func PostPatientScreening(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"error": "Expected unix time"}`))
 		return
 	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewContractManager(*ContractAddress, "url", "", "")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -161,8 +165,10 @@ func PostPatientDeath(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"error": "Expected unix time"}`))
 		return
 	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -198,8 +204,10 @@ func PostPatientRemission(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`{"error": "Expected unix time"}`))
 		return
 	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)

@@ -62,8 +62,10 @@ func PostTreatment(w http.ResponseWriter, r *http.Request) {
 	activeAgent := r.FormValue("activeAgent")
 	description := r.FormValue("description")
 	steps := r.FormValue("steps")
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)

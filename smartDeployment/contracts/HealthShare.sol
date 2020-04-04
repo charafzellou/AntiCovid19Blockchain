@@ -114,7 +114,7 @@ contract HealthShare is Ownable {
 
     function getTreatment(
         uint _id
-    ) external view returns (
+    ) external issetTreatment(_id) view returns (
         string memory,
         string memory,
         string memory
@@ -128,7 +128,7 @@ contract HealthShare is Ownable {
 
     function getPatientPrimaryData(
         uint _id
-    ) external view returns (
+    ) external issetPatient(_id) view returns (
         uint,
         bool,
         string memory,
@@ -148,7 +148,7 @@ contract HealthShare is Ownable {
 
     function getPatientDetailedData(
         uint _id
-    ) external view returns (
+    ) external issetPatient(_id) view returns (
         uint,
         uint,
         uint,
