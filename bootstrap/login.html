@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AntiCovid-19 Blockchain</title>
+  <meta name="description" content="A Blockchain to fight the CoVid-19 spread worldwide !">
+  <meta name="keywords" content="anti covid-149 covid corona coronavirus blockchain ethereum solidity">
+  <link rel="shortcut icon" type="image/png" href="favicon.ico" />
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+  <a class="navbar-brand" href="#"><img src="img/logo.png" class="img-responsive"
+      style="width: 140px; margin-top: -16px;"></a>
+  <!--login form-->
+  <div style="margin: auto; padding-top: 50px; padding-bottom: 50px; text-align: center; width: 30%">
+  <form>
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+        placeholder="Enter email">
+      <small id="emailHelp" class="form-text text-muted">This is your <b>individual professional</b> email</small>
+    </div>
+    <div class="form-group">
+      <label for="exampleFormControlSelect2">Healthcare Institution</label>
+      <select multiple class="form-control" id="exampleFormControlSelect2">
+        <option>Institut Pasteur</option>
+        <option>Hôpital Pierre-Marie Curie</option>
+        <option>Massachussets Institute</option>
+        <option>John-Hopkins University</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Log in</button>
+  </form>
+</div>  
+  <!--login form-->
+  <!--contact-->
+  <section id="contact" class="section-padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="ser-title">Contact us</h2>
+          <hr class="botm-line">
+        </div>
+        <div class="col-md-4 col-sm-4">
+          <h3>Wanna participate? Write us a letter!</h3>
+          <div class="space"></div>
+          <p><i class="fa fa-map-marker fa-fw pull-left fa-2x"></i>242 rue du Faubourg Saint-Antoine<br> Paris, 75012
+          </p>
+          <div class="space"></div>
+          <p><i class="fa fa-envelope-o fa-fw pull-left fa-2x"></i>info@esgi.fr</p>
+          <div class="space"></div>
+          <p><i class="fa fa-phone fa-fw pull-left fa-2x"></i>+33 123 123 123</p>
+        </div>
+        <div class="col-md-8 col-sm-8 marb20">
+          <div class="contact-info">
+            <h3 class="cnt-ttl">Wanna participate? Send us an email!</h3>
+            <div class="space"></div>
+            <div id="sendmessage">Your message has been sent. Thank you!</div>
+            <div id="errormessage"></div>
+            <form action="" method="post" role="form" class="contactForm">
+              <div class="form-group">
+                <input type="text" name="name" class="form-control br-radius-zero" id="name" placeholder="Your Name"
+                  data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                <div class="validation"></div>
+              </div>
+              <div class="form-group">
+                <input type="email" class="form-control br-radius-zero" name="email" id="email" placeholder="Your Email"
+                  data-rule="email" data-msg="Please enter a valid email" />
+                <div class="validation"></div>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control br-radius-zero" name="subject" id="subject" placeholder="Subject"
+                  data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                <div class="validation"></div>
+              </div>
+              <div class="form-group">
+                <textarea class="form-control br-radius-zero" name="message" rows="5" data-rule="required"
+                  data-msg="Please write something for us" placeholder="Message"></textarea>
+                <div class="validation"></div>
+              </div>
+
+              <div class="form-action">
+                <button type="submit" class="btn btn-form">Send Message</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ contact-->
+  <!--footer-->
+  <footer id="footer">
+    <div class="top-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-sm-4 marb20">
+            <div class="ftr-tle">
+              <h4 class="white no-padding">About Us</h4>
+            </div>
+            <div class="info-sec">
+              <p>Praesent convallis tortor et enim laoreet, vel consectetur purus latoque penatibus et dis parturient.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 marb20">
+            <div class="ftr-tle">
+              <h4 class="white no-padding">Quick Links</h4>
+            </div>
+            <div class="info-sec">
+              <ul class="quick-info">
+                <li><a href="index.html"><i class="fa fa-circle"></i>Home</a></li>
+                <li><a href="#service"><i class="fa fa-circle"></i>Service</a></li>
+                <li><a href="#contact"><i class="fa fa-circle"></i>Appointment</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-4 marb20">
+            <div class="ftr-tle">
+              <h4 class="white no-padding">Follow us</h4>
+            </div>
+            <div class="info-sec">
+              <ul class="social-icon">
+                <a href="">
+                  <li class="bgdark-blue"><i class="fa fa-linkedin"></i></li>
+                </a>
+                <a href="">
+                  <li class="bgdark-blue"><i class="fa fa-linkedin"></i></li>
+                </a>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-line">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            © Copyright Medilab Theme. All Rights Reserved
+            <div class="credits">
+              <!--
+                All the links in the footer should remain intact.
+                You can delete the links only if you purchased the pro version.
+                Licensing information: https://bootstrapmade.com/license/
+                Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Medilab
+              -->
+              Designed by <a href="https://bootstrapmade.com/">BootstrapMade.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--/ footer-->
+
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.easing.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/custom.js"></script>
+  <script src="contactform/contactform.js"></script>
+
+</body>
+
+</html>
