@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"../contractManager"
+	"anticovid/contractManager"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -25,7 +25,7 @@ func GetTreatmentsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -33,7 +33,7 @@ func GetTreatmentsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := cManager.GetTreatment(treatmentId, "xxx")
+	response, err := cManager.GetTreatment(treatmentId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -62,8 +62,10 @@ func PostTreatment(w http.ResponseWriter, r *http.Request) {
 	activeAgent := r.FormValue("activeAgent")
 	description := r.FormValue("description")
 	steps := r.FormValue("steps")
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -76,7 +78,6 @@ func PostTreatment(w http.ResponseWriter, r *http.Request) {
 		activeAgent,
 		description,
 		steps,
-		"xxx",
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

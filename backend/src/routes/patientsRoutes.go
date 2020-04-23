@@ -1,12 +1,15 @@
 package routes
 
 import (
-	"../contractManager"
+	"anticovid/contractManager"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
+
+var ContractAddress *string
+var RPCurl *string
 
 func GetPatient(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -25,7 +28,7 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, "", "")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -33,7 +36,7 @@ func GetPatientById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	response, err := cManager.GetPatient(patientId, "xxx")
+	response, err := cManager.GetPatient(patientId)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -72,8 +75,10 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 	country := r.FormValue("country")
 	refPhysician := r.FormValue("refPhysician")
 	medicalHistory := r.FormValue("medicalHistory")
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
 
-	cManager, err := contractManager.NewConractManager("xxx", "url")
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
@@ -91,7 +96,6 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 		country,
 		refPhysician,
 		medicalHistory,
-		"xxx",
 	)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -106,20 +110,119 @@ func PostPatient(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostPatientScreening(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 	w.Header().Set("Content-Type", "application/json")
+
+	patientId, err := strconv.ParseInt(params["_id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected patient Id as a number"}`))
+		return
+	}
+
+	screening, err := strconv.ParseInt(params["screening"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected unix time"}`))
+		return
+	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
+
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
+
+	response, err := cManager.SetScreeningDate(patientId, screening)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "post called"}`))
+	w.Write([]byte(response))
 }
 
 func PostPatientDeath(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 	w.Header().Set("Content-Type", "application/json")
+
+	patientId, err := strconv.ParseInt(params["_id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected patient Id as a number"}`))
+		return
+	}
+
+	death, err := strconv.ParseInt(params["death"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected unix time"}`))
+		return
+	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
+
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
+
+	response, err := cManager.SetDeathDate(patientId, death)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "post called"}`))
+	w.Write([]byte(response))
 }
 
 func PostPatientRemission(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
 	w.Header().Set("Content-Type", "application/json")
+
+	patientId, err := strconv.ParseInt(params["_id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected patient Id as a number"}`))
+		return
+	}
+
+	remission, err := strconv.ParseInt(params["remission"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(`{"error": "Expected unix time"}`))
+		return
+	}
+	jsonKey := r.FormValue("jsonKey")
+	passphrase := r.FormValue("passphrase")
+
+	cManager, err := contractManager.NewContractManager(*ContractAddress, *RPCurl, jsonKey, passphrase)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
+
+	response, err := cManager.SetRemissionDate(patientId, remission)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		errResponse := fmt.Sprintf(`{"error": "%v"}`, err)
+		w.Write([]byte(errResponse))
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte(`{"message": "post called"}`))
+	w.Write([]byte(response))
 }
 
